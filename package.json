@@ -1,11 +1,14 @@
 {
-  "name": "oidc-client-ts",
-  "version": "2.2.1",
+  "name": "@mds-bd/oidc-client-ts",
+  "version": "2.3.0",
   "description": "OpenID Connect (OIDC) & OAuth2 client library",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com:authts/oidc-client-ts.git"
-  },
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/MDS-BD/oidc-client-ts"
+	},
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com"
+	},
   "homepage": "https://github.com/authts/oidc-client-ts#readme",
   "license": "Apache-2.0",
   "main": "dist/umd/oidc-client-ts.js",
