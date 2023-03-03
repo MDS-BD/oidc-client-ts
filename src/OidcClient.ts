@@ -1,7 +1,7 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-import { Logger, UrlUtils } from "./utils";
+import { JwtUtils, Logger, UrlUtils } from "./utils";
 import { ErrorResponse } from "./errors";
 import { OidcClientSettings, OidcClientSettingsStore } from "./OidcClientSettings";
 import { ResponseValidator } from "./ResponseValidator";
@@ -15,6 +15,8 @@ import { SigninState } from "./SigninState";
 import { State } from "./State";
 import { TokenClient } from "./TokenClient";
 import { ClaimsService } from "./ClaimsService";
+import { UserInfoService } from "./UserInfoService";
+import type { IdTokenClaims } from "./Claims";
 
 /**
  * @public
@@ -85,12 +87,14 @@ export class OidcClient {
     protected readonly _validator: ResponseValidator;
     protected readonly _tokenClient: TokenClient;
     protected readonly _claimsService: ClaimsService;
+    protected readonly _userInfoService: UserInfoService;
 
     public constructor(settings: OidcClientSettings) {
         this.settings = new OidcClientSettingsStore(settings);
 
         this.metadataService = new MetadataService(this.settings);
         this._claimsService = new ClaimsService(this.settings);
+        this._userInfoService = new UserInfoService(this.settings, this.metadataService);
         this._validator = new ResponseValidator(this.settings, this.metadataService, this._claimsService);
         this._tokenClient = new TokenClient(this.settings, this.metadataService);
     }
@@ -317,5 +321,12 @@ export class OidcClient {
             token,
             token_type_hint: type,
         });
+    }
+
+    public async getUserInfo(token: string): Promise<IdTokenClaims> {
+        // Note: this is not a clean implementation, but since we're in a private fork we really do not care
+        const profile = JwtUtils.decode(token ?? "");
+        const newClaims = await this._userInfoService.getClaims(token);
+        return this._claimsService.mergeClaims(profile, newClaims) as IdTokenClaims;
     }
 }

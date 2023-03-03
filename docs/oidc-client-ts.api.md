@@ -298,6 +298,8 @@ export class OidcClient {
     // (undocumented)
     createSignoutRequest({ state, id_token_hint, request_type, post_logout_redirect_uri, extraQueryParams, }?: CreateSignoutRequestArgs): Promise<SignoutRequest>;
     // (undocumented)
+    getUserInfo(token: string): Promise<IdTokenClaims>;
+    // (undocumented)
     protected readonly _logger: Logger;
     // (undocumented)
     readonly metadataService: MetadataService;
@@ -327,6 +329,10 @@ export class OidcClient {
     protected readonly _tokenClient: TokenClient;
     // (undocumented)
     useRefreshToken({ state, timeoutInSeconds, }: UseRefreshTokenArgs): Promise<SigninResponse>;
+    // Warning: (ae-forgotten-export) The symbol "UserInfoService" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    protected readonly _userInfoService: UserInfoService;
     // Warning: (ae-forgotten-export) The symbol "ResponseValidator" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -917,7 +923,7 @@ export class UserManager {
     get events(): UserManagerEvents;
     // (undocumented)
     protected readonly _events: UserManagerEvents;
-    getUser(): Promise<User | null>;
+    getUser(refreshUserInfo?: boolean): Promise<User | null>;
     // Warning: (ae-forgotten-export) The symbol "IFrameNavigator" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
