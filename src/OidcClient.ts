@@ -17,6 +17,7 @@ import { TokenClient } from "./TokenClient";
 import { ClaimsService } from "./ClaimsService";
 import { UserInfoService } from "./UserInfoService";
 import type { IdTokenClaims } from "./Claims";
+import type { User } from "./User";
 
 /**
  * @public
@@ -323,10 +324,10 @@ export class OidcClient {
         });
     }
 
-    public async getUserInfo(token: string): Promise<IdTokenClaims> {
+    public async getUserInfo(user: User): Promise<IdTokenClaims> {
         // Note: this is not a clean implementation, but since we're in a private fork we really do not care
-        const profile = JwtUtils.decode(token ?? "");
-        const newClaims = await this._userInfoService.getClaims(token);
+        const profile = JwtUtils.decode(user.id_token!);
+        const newClaims = await this._userInfoService.getClaims(user.access_token);
         return this._claimsService.mergeClaims(profile, newClaims) as IdTokenClaims;
     }
 }

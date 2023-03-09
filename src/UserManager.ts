@@ -140,13 +140,15 @@ export class UserManager {
                         logger.info("after refresh, user is not logged anymore");
                         return null;
                     }
-                } else {
+                } else if (user.id_token) {
                     logger.debug("refreshing user info");
-                    user.profile = await this._client.getUserInfo(user.access_token);
+                    user.profile = await this._client.getUserInfo(user);
                     await this.storeUser(user);
                     logger.debug("user updated in storage");
+                    logger.debug("user info refreshed");
+                } else {
+                    logger.debug("unable to refresh user info, something is wrong");
                 }
-                logger.debug("user info refreshed");
             }
             logger.info("user loaded");
             this._events.load(user, false);

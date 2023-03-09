@@ -298,7 +298,7 @@ export class OidcClient {
     // (undocumented)
     createSignoutRequest({ state, id_token_hint, request_type, post_logout_redirect_uri, extraQueryParams, }?: CreateSignoutRequestArgs): Promise<SignoutRequest>;
     // (undocumented)
-    getUserInfo(token: string): Promise<IdTokenClaims>;
+    getUserInfo(user: User): Promise<IdTokenClaims>;
     // (undocumented)
     protected readonly _logger: Logger;
     // (undocumented)
